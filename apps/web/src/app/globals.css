@@ -1,26 +1,140 @@
 @import "tailwindcss";
 
+/*
+ * Workboard design system tokens.
+ * Source of truth: apps/web/docs/design-system/tokens.json (guide: README.md in the same folder).
+ * Change a value there and here together.
+ */
+
+/* Light theme (default) */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f7f7f5;
+  --surface-raised: #ffffff;
+  --surface-sunken: #efefec;
+  --line: #e2e2de;
+  --line-strong: #8a8a84;
+  --ink: #1a1a1a;
+  --ink-muted: #5f5f5a;
+  --accent: #0f766e;
+  --on-accent: #ffffff;
+  --accent-soft: #e6f4f2;
+  --warning: #9a4508;
+  --warning-soft: #fdf3e4;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --focus: #0f766e;
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Dark theme: follows the OS unless data-theme="light" is set on <html> */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --surface: #121212;
+    --surface-raised: #1c1c1c;
+    --surface-sunken: #0b0b0b;
+    --line: #2e2e2e;
+    --line-strong: #737373;
+    --ink: #ededed;
+    --ink-muted: #a3a3a3;
+    --accent: #2dd4bf;
+    --on-accent: #04201d;
+    --accent-soft: #0d2a27;
+    --warning: #fbbf24;
+    --warning-soft: #2b2008;
+    --danger: #f87171;
+    --danger-soft: #2d1210;
+    --focus: #5eead4;
+    --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Forced dark theme */
+:root[data-theme="dark"] {
+  --surface: #121212;
+  --surface-raised: #1c1c1c;
+  --surface-sunken: #0b0b0b;
+  --line: #2e2e2e;
+  --line-strong: #737373;
+  --ink: #ededed;
+  --ink-muted: #a3a3a3;
+  --accent: #2dd4bf;
+  --on-accent: #04201d;
+  --accent-soft: #0d2a27;
+  --warning: #fbbf24;
+  --warning-soft: #2b2008;
+  --danger: #f87171;
+  --danger-soft: #2d1210;
+  --focus: #5eead4;
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/*
+ * Tailwind mapping: bg-surface, text-ink, border-line, bg-accent, text-on-accent, ...
+ * Spacing uses Tailwind's default 4px step: p-1 = space-1 (4px), p-2 = 8px, p-3 = 12px, p-4 = 16px, p-6 = 24px.
+ */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-focus: var(--focus);
+
+  /* Kept for existing code that uses bg-background / text-foreground */
+  --color-background: var(--surface);
+  --color-foreground: var(--ink);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --shadow-card: var(--card-shadow);
+}
+
+@theme {
+  /* Type styles: text-display, text-title, text-body, text-caption, text-label, text-id */
+  --text-display: 24px;
+  --text-display--line-height: 32px;
+  --text-display--font-weight: 600;
+  --text-display--letter-spacing: -0.01em;
+  --text-title: 16px;
+  --text-title--line-height: 24px;
+  --text-title--font-weight: 600;
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
+  --text-label: 12px;
+  --text-label--line-height: 16px;
+  --text-label--font-weight: 500;
+  --text-id: 12px;
+  --text-id--line-height: 16px;
+
+  /* Radii: rounded-sm (indicators), rounded-md (buttons, fields, cards), rounded-lg (columns, messages) */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+}
+
+@layer base {
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
 }
