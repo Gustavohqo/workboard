@@ -9,7 +9,5 @@ export default defineConfig({
     globals: true,
     root: './',
     include: ['**/*.spec.ts'],
-    // Remove once the first domain spec exists (Phase 2).
-    passWithNoTests: true,
   },
 });

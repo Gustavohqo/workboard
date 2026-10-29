@@ -28,17 +28,20 @@ Status: **Executada** · **Em andamento** · **Pendente**
 - Removidos `app.controller.ts`, `app.controller.spec.ts`, `app.service.ts` e `test/app.e2e-spec.ts`.
 - `app.module.ts` mantido como módulo raiz, sem controllers nem providers.
 - Instaladas `class-validator` e `class-transformer` em `@workboard/api`.
-- `passWithNoTests: true` em `vitest.config.ts` e `vitest.config.e2e.ts`, para que os scripts passem sem specs. Remover ao criar os primeiros testes (Fase 2 e Fase 5).
+- `passWithNoTests: true` em `vitest.config.ts` e `vitest.config.e2e.ts`, para que os scripts passem sem specs. Remover `passWithNoTests` de `vitest.config.ts` foi feito na Fase 2; em `vitest.config.e2e.ts` permanece até a Fase 5.
 - Verificado: `lint`, `build`, `test` e `test:e2e` da API passam.
 
 ## Fase 2 — Domínio puro (TDD, sem Nest)
 
-**Status: Pendente**
+**Status: Executada**
 
-- **Gerador de ids** (ADR 0003): contador a partir de 1, sem zeros à esquerda, nunca reutilizado; comparador por tamanho e depois por texto.
-- **`Task`** (`id`, `title`, `column`): título não pode ser vazio nem só espaços (RN18).
-- **`BoardSettings`**: colunas fixas e limite inteiro ≥ 1, padrão 2 (RN06, RN07, RN19); alteração bloqueada se `em_andamento` tiver tarefas (RN21).
-- **`History`**: pilha de entradas `criacao` e `movimentacao` (ADR 0004).
+Arquivos em `apps/api/src/board/domain/`, cada um com `*.spec.ts` ao lado. Nenhum importa `@nestjs/*`.
+
+- **Gerador de ids** (`id-generator.ts`, ADR 0003): `IdGenerator` com contador a partir de 1, sem zeros à esquerda, nunca reutilizado; `compareTaskIds` por tamanho e depois por texto.
+- **`Task`** (`task.ts`): `id`, `title`, `column`; lança erro se o título for vazio ou só espaços (RN18).
+- **Colunas** (`column.ts`): `COLUMNS` fixas (`todo`, `in_progress`, `done`, conforme ADR 0007) e `isColumn` (RN04).
+- **`BoardSettings`** (`board-settings.ts`): limite inteiro ≥ 1, padrão 2 (RN07, RN19); `setLimit(limit, quantidadeEmAndamento)` falha se houver tarefas em `em_andamento` (RN21) e valida antes de alterar.
+- **`History`** (`history.ts`): pilha com `push`, `peek`, `pop` e `size`; entradas `create` e `move` (ADR 0004). Os nomes do código estão em inglês, conforme AGENTS.md.
 
 ## Fase 3 — Serviço transacional (TDD)
 
@@ -46,7 +49,7 @@ Status: **Executada** · **Em andamento** · **Pendente**
 
 Cada teste verifica tarefas **e** histórico (ADR 0005).
 
-- **Criar** (RN01, RN18): entra em `a_fazer`; falha sem alterar nada.
+- **Criar** (RN01, RN18): entra em `todo`; falha sem alterar nada.
 - **Mover** (RN02–RN05, RN17): validar tudo antes; mesma coluna não muda nada nem entra no histórico; respeita o limite.
 - **Desfazer** (RN08–RN12): ler o topo, reverter, só então remover a entrada; sem histórico, retorna `nada_a_desfazer`; a reversão não passa pela checagem de limite.
 - **Alterar limite** (RN21): falha se houver tarefa em `em_andamento`; sucesso com a coluna vazia, mesmo após outras ações.
