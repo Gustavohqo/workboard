@@ -19,7 +19,7 @@ Status: **Executada** · **Em andamento** · **Pendente**
 | Configuração do limite pelo cliente | Executada | ADR 0006 e RN21. |
 | Validação dos DTOs com `class-validator` | Executada | Dependência instalada na Fase 1. |
 | Destino do scaffold | Executada | Removido na Fase 1. |
-| Contrato HTTP (rotas, formato de resposta, mapeamento de resultado: funcionou / falhou / não mudou nada, `nada_a_desfazer`) | Pendente | Registrar como ADR `0007`, com rotas em inglês. |
+| Contrato HTTP (rotas, formato de resposta, mapeamento de resultado: funcionou / falhou / não mudou nada, `nada_a_desfazer`) | Executada | ADR 0007: colunas `todo`, `in_progress`, `done`; mensagens de erro fixas em inglês; desfazer sem histórico retorna 200; board em todas as respostas. |
 
 ## Fase 1 — Scaffold e base
 
