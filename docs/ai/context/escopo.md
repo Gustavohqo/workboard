@@ -51,7 +51,7 @@ A interação pode ser feita por uma tela ou por comandos/funções.
 ### 3.5 Exibição do quadro
 
 - **RN13** — Mostrar as tarefas de cada coluna em ordem crescente de identificador.
-- **RN14** — Indicar se é possível desfazer.
+- **RN14** — Indicar se é possível desfazer, na forma definida pela RN22.
 
 ### 3.6 Resultado das ações
 
@@ -79,3 +79,5 @@ O enunciado não definia estes pontos; foram decididos com o usuário em 2026-10
 - **RN18** — O título da tarefa não pode ser vazio nem conter só espaços; caso contrário, a criação falha sem alterar quadro e histórico.
 - **RN19** — O limite de `em_andamento` deve ser um número inteiro maior ou igual a 1; outros valores são rejeitados na configuração.
 - **RN20** — O id é gerado pelo sistema como contador sem zeros à esquerda, é ordenado por tamanho e depois por texto, e nunca é reutilizado (ver ADR 0003).
+- **RN21** — O limite de `em_andamento` só pode ser alterado enquanto a coluna `em_andamento` estiver vazia. Se houver alguma tarefa nessa coluna, a alteração falha: explicar o erro e manter a configuração, o quadro e o histórico como estavam. A alteração feita com a coluna vazia é permitida mesmo depois de outras ações.
+- **RN22** — Somente a tarefa afetada pela última ação que mudou o quadro exibe o indicador de que a ação pode ser desfeita; as demais tarefas não exibem indicador algum. Ações que falham ou não mudam nada não contam como última ação. Depois de um desfazer, o indicador passa para a tarefa afetada pela ação que ficou no topo do histórico; se o histórico estiver vazio, nenhuma tarefa exibe o indicador. O desfazer em si não gera entrada no histórico (RN11).
