@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { BoardSettings, isValidLimit } from './domain/board-settings.js';
 import { isColumn, type Column } from './domain/column.js';
 import { History, type HistoryEntry } from './domain/history.js';
@@ -43,6 +44,7 @@ export type ActionResult =
  * Failures caused by validation return `failed`; failures of the storage
  * layer are thrown after restoring the previous state.
  */
+@Injectable()
 export class BoardService {
   private readonly tasks = new Map<string, Task>();
 

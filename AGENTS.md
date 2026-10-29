@@ -60,6 +60,7 @@ Monorepo gerenciado com **pnpm workspaces** + **Turborepo**.
 - Use o **App Router** (`src/app`). Não crie o diretório `pages/`.
 - Componentes são **Server Components** por padrão; adicione `'use client'` apenas quando precisar de estado, efeitos ou eventos do navegador.
 - Estilização com **Tailwind CSS**.
+- Siga o design system em `apps/web/docs/design-system/README.md`: use os tokens de `src/app/globals.css` (`bg-surface`, `text-ink`, `text-body`...), não cores fixas do Tailwind.
 - Use o alias `@/` para imports internos (`@/components/...`).
 - A URL da API vem de `API_URL` (veja `apps/web/.env.example`).
 - Testes:
