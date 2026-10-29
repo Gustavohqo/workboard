@@ -28,7 +28,7 @@ Status: **Executada** · **Em andamento** · **Pendente**
 - Removidos `app.controller.ts`, `app.controller.spec.ts`, `app.service.ts` e `test/app.e2e-spec.ts`.
 - `app.module.ts` mantido como módulo raiz, sem controllers nem providers.
 - Instaladas `class-validator` e `class-transformer` em `@workboard/api`.
-- `passWithNoTests: true` em `vitest.config.ts` e `vitest.config.e2e.ts`, para que os scripts passem sem specs. Remover `passWithNoTests` de `vitest.config.ts` foi feito na Fase 2; em `vitest.config.e2e.ts` permanece até a Fase 5.
+- `passWithNoTests: true` em `vitest.config.ts` e `vitest.config.e2e.ts`, para que os scripts passem sem specs. Remover `passWithNoTests` de `vitest.config.ts` foi feito na Fase 2; de `vitest.config.e2e.ts`, na Fase 5.
 - Verificado: `lint`, `build`, `test` e `test:e2e` da API passam.
 
 ## Fase 2 — Domínio puro (TDD, sem Nest)
@@ -55,7 +55,7 @@ Implementado em `apps/api/src/board/board.service.ts`, com `board.service.spec.t
 - Todo resultado traz o `board` atual; `createTask` também devolve `taskId`.
 - Os auxiliares `isValidTitle` (`task.ts`) e `isValidLimit` (`board-settings.ts`) passam a ser a fonte única da regra de RN18 e RN19.
 - `HistoryEntry` usa o tipo `Column` em `from` e `to`.
-- O serviço ainda não tem `@Injectable()`; a injeção fica para a Fase 4.
+- O serviço ainda não tinha `@Injectable()`; a injeção foi feita na Fase 4.
 
 - **Criar** (RN01, RN18): entra em `todo`; falha sem alterar nada.
 - **Mover** (RN02–RN05, RN17): validar tudo antes; mesma coluna não muda nada nem entra no histórico; respeita o limite.
@@ -67,20 +67,29 @@ Implementado em `apps/api/src/board/board.service.ts`, com `board.service.spec.t
 
 ## Fase 4 — Camada HTTP (TDD)
 
-**Status: Pendente**
+**Status: Executada**
 
-- `board.module.ts`, `board.controller.ts`, `board.service.ts` (um módulo por domínio, AGENTS.md seção 4).
-- Controller só lida com HTTP; regra fica no serviço.
-- DTOs validados com `class-validator` e `class-transformer`.
+- `board.module.ts`, `board.controller.ts` e `board.service.ts` (um módulo por domínio, AGENTS.md seção 4).
+- Controller só lida com HTTP; regra fica no serviço. Cada falha do serviço vira `HttpException` com o corpo do ADR 0007 e o status do seu `error.code`.
+- DTOs validados com `class-validator` em `board/dto/`: `CreateTaskDto` (`title`), `MoveTaskDto` (`column`) e `SetLimitDto` (`wipLimit`).
 - Rotas sob `/api`, em inglês, conforme o ADR 0007 (Fase 0).
-- Testes de controller com `supertest`.
+- Testes de controller com `supertest` em `board.controller.spec.ts` (19 testes, um por rota, status e corpo).
+
+Decisões tomadas na execução:
+
+- **Corpo inválido com `board`:** `BoardValidationFilter` converte o `BadRequestException` do `ValidationPipe` global em `VALIDATION_ERROR` (400) e inclui o quadro atual, como o ADR 0007 exige.
+- **Pipes e filtros globais em `configure-app.ts`:** `main.ts` e os testes usam a mesma configuração (prefixo `/api`, `ValidationPipe`, CORS).
+- **Serviço criado por fábrica no módulo:** o construtor do serviço recebe objetos de domínio com valores padrão, que o Nest não saberia injetar; por isso `BoardModule` usa `useFactory`.
+- **Nome do campo do limite:** `wipLimit`, igual ao campo do `GET /api/board`. O ADR 0007 não fixa o nome do corpo do `PUT`.
 
 ## Fase 5 — E2E
 
-**Status: Pendente**
+**Status: Executada**
 
-- `apps/api/test/*.e2e-spec.ts` cobrindo: criar, mover até o limite, exceder o limite, desfazer até `nada_a_desfazer`, alterar limite com e sem tarefa em andamento.
-- Executar com `pnpm --filter @workboard/api test:e2e`.
+- `apps/api/test/board.e2e-spec.ts` (6 testes) cobre: criar e ordenar, preencher `in_progress` até o limite e recusar o excedente sem alterar o quadro, alterar o limite com tarefa em andamento (rejeitado) e sem ela (aceito), aplicar o novo limite depois de a coluna esvaziar, desfazer até `nada_a_desfazer` e não reutilizar ids.
+- Executado com `pnpm --filter @workboard/api test:e2e`.
+- `passWithNoTests` removido de `vitest.config.e2e.ts`.
+- Os testes foram escritos depois da implementação da Fase 4, então não passaram por uma etapa de falha antes do código; a falha de um teste foi causada por erro no próprio teste e corrigida.
 
 ## Fase 6 — Fechamento
 
