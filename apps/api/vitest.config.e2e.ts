@@ -7,5 +7,7 @@ export default defineConfig({
     globals: true,
     root: './',
     include: ['**/*.e2e-spec.ts'],
+    // Remove once the first e2e spec exists (Phase 5).
+    passWithNoTests: true,
   },
 });
