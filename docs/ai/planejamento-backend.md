@@ -45,9 +45,17 @@ Arquivos em `apps/api/src/board/domain/`, cada um com `*.spec.ts` ao lado. Nenhu
 
 ## Fase 3 — Serviço transacional (TDD)
 
-**Status: Pendente**
+**Status: Executada**
 
 Cada teste verifica tarefas **e** histórico (ADR 0005).
+
+Implementado em `apps/api/src/board/board.service.ts`, com `board.service.spec.ts` ao lado (31 testes, escritos e vistos falhando antes da implementação). Decisões tomadas na execução:
+
+- Ações de validação devolvem `outcome: 'failed'` com `error.code` do ADR 0007; falhas de armazenamento são lançadas depois de restaurar o estado anterior (RN16).
+- Todo resultado traz o `board` atual; `createTask` também devolve `taskId`.
+- Os auxiliares `isValidTitle` (`task.ts`) e `isValidLimit` (`board-settings.ts`) passam a ser a fonte única da regra de RN18 e RN19.
+- `HistoryEntry` usa o tipo `Column` em `from` e `to`.
+- O serviço ainda não tem `@Injectable()`; a injeção fica para a Fase 4.
 
 - **Criar** (RN01, RN18): entra em `todo`; falha sem alterar nada.
 - **Mover** (RN02–RN05, RN17): validar tudo antes; mesma coluna não muda nada nem entra no histórico; respeita o limite.

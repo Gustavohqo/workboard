@@ -1,3 +1,8 @@
+/** Tells whether a value is a usable limit: an integer of at least 1 (RN19). */
+export function isValidLimit(value: unknown): value is number {
+  return typeof value === 'number' && Number.isInteger(value) && value >= 1;
+}
+
 /** Board configuration. The limit applies to the `in_progress` column (ADR 0006). */
 export class BoardSettings {
   private currentLimit = 2;
@@ -11,7 +16,7 @@ export class BoardSettings {
    * `in_progress` column is empty (RN21). Validates before changing anything.
    */
   setLimit(limit: number, inProgressCount: number): void {
-    if (!Number.isInteger(limit) || limit < 1) {
+    if (!isValidLimit(limit)) {
       throw new Error('Limit must be an integer of at least 1');
     }
     if (inProgressCount > 0) {

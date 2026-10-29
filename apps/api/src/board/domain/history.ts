@@ -1,7 +1,9 @@
+import type { Column } from './column.js';
+
 /** One action that changed the board, enough to revert it (ADR 0004). */
 export type HistoryEntry =
   | { kind: 'create'; taskId: string }
-  | { kind: 'move'; taskId: string; from: string; to: string };
+  | { kind: 'move'; taskId: string; from: Column; to: Column };
 
 /** Stack of the actions that changed the board; the top is the last one. */
 export class History {
