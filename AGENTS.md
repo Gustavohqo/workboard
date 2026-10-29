@@ -76,6 +76,13 @@ Monorepo gerenciado com **pnpm workspaces** + **Turborepo**.
 ## 7. Boas práticas de trabalho
 
 - Faça mudanças pequenas e focadas; não refatore o que não foi pedido.
+- **Siga TDD: o teste vem antes do código.** Para cada comportamento, execute o ciclo completo, sem pular etapas:
+  1. **Cria o teste** que descreve o comportamento esperado.
+  2. **Executa** o teste.
+  3. **Confirma que falha**, e pelo motivo esperado (não por erro de sintaxe ou import).
+  4. **Implementa** o mínimo de código para o teste passar.
+  5. **Executa** o teste de novo.
+  6. **Confirma o sucesso** antes de seguir para o próximo comportamento.
 - Antes de concluir, rode `pnpm lint`, `pnpm build` e `pnpm test` (e `pnpm test:e2e` se mexeu em páginas ou endpoints).
 - Credenciais do GitHub ficam criptografadas em `~/.authinfo.gpg` (helper `git-credential-netrc`, veja o README). **Nunca leia, decifre, exiba ou altere esse arquivo**, e nunca coloque tokens em URLs de remoto ou em configurações do git.
 - Nunca faça commit de segredos. Variáveis de ambiente novas devem aparecer no `.env.example` do app.
