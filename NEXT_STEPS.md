@@ -41,9 +41,9 @@ Current scope: `docs/ai/context/escopo.md`. Current decisions: `docs/ai/decision
 
 ## Work-in-progress limit
 
-- **Today:** the limit is configured once before use (minimum 1, default 2). Because undo restores states in reverse order, it never pushes `em_andamento` over the limit.
-- **Trigger:** the limit can be changed while the board is in use.
-- **Decision:** what happens when the new limit is below the current number of tasks in `em_andamento`, and whether undoing a move back into `em_andamento` may exceed the new limit.
+- **Today:** the client sets the limit (minimum 1, default 2) and it can only be changed while `em_andamento` is empty (RN21, ADR 0006). Because undo restores states in reverse order, it never pushes `em_andamento` over the limit.
+- **Trigger:** the rule RN21 is no longer enough, for example when several clients change the limit at the same time.
+- **Decision:** how to serialize limit changes against moves (see Real-time collaboration).
 
 ## Task deletion
 

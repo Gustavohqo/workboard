@@ -41,6 +41,9 @@ Monorepo gerenciado com **pnpm workspaces** + **Turborepo**.
 - Use **pnpm** (via Corepack). Nunca use `npm install` ou `yarn` — eles quebram o lockfile.
   - Adicionar dependência a um app: `pnpm --filter @workboard/web add <pacote>`.
 - Comandos de raiz passam pelo Turborepo: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm test`.
+- **Todo código é escrito em inglês**: identificadores, comentários, docstrings (JSDoc) e nomes de arquivos de código.
+- **Rotas HTTP são em inglês** (ex.: `/api/tasks`, não `/api/tarefas`).
+- Documentação em `docs/`, `HISTORY.md` e mensagens para o usuário continuam em português.
 
 ## 4. Backend (`apps/api`)
 
