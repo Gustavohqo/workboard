@@ -93,11 +93,11 @@ Decisões tomadas na execução:
 
 ## Fase 6 — Fechamento
 
-**Status: Pendente**
+**Status: Executada**
 
-- Gates na raiz: `pnpm lint`, `pnpm build`, `pnpm test`, e `pnpm test:e2e` por mexer em endpoints.
-- Variáveis de ambiente novas no `apps/api/.env.example`.
-- ADRs para decisões novas.
+- Gates na raiz: `pnpm lint`, `pnpm build` e `pnpm test` passam (`turbo --force`, sem cache); `test:e2e` da API passa (6 testes).
+- Variáveis de ambiente: `apps/api/.env.example` já cobre `PORT` e `WEB_ORIGIN`, as únicas lidas em `apps/api/src`. Nenhuma nova.
+- ADRs para decisões novas: [0008](../docs/ai/decisions/0008-nome-do-campo-do-limite.md) (nome `wipLimit` no `PUT`) e [0009](../docs/ai/decisions/0009-composicao-do-modulo-board.md) (serviço por fábrica e `configureApp`). O `BoardValidationFilter` segue o ADR 0007 e não ganhou ADR próprio.
 - Entrada no `HISTORY.md` ao fim de cada interação.
 - Commit somente quando o usuário pedir.
 
