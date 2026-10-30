@@ -14,11 +14,19 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  // Sobe o Next automaticamente; reaproveita se já estiver rodando (pnpm dev)
-  webServer: {
-    command: 'pnpm dev',
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  // Sobe o Next e a API (os testes de quadro dependem dela); reaproveita se já estiverem rodando
+  webServer: [
+    {
+      command: 'pnpm dev',
+      url: baseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+    {
+      command: 'pnpm --filter @workboard/api start',
+      url: 'http://localhost:3333/api/board',
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });
